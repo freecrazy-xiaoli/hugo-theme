@@ -6,8 +6,6 @@ author: 癫狂傲骨
 avatar: https://cdn.jsdelivr.net/gh/freecrazy-xiaoli/blog-imgs/screen/202110221408839.jpg
 # authorlink: https://author.site
 cover: /img/cover.jpg
-# images:
-#   - /img/cover.jpg
 categories:
   - category1
 tags:
