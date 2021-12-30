@@ -72,6 +72,8 @@
 
               | {{ .ReadingTime }}{{ i18n "minuteRead" .ReadingTime }}
 
+              | {{ .WordCount }} 字
+
               {{ if ne .Params.nolastmod true }}
               | {{ i18n "updateAt" }}
                 {{ if .Site.Params.Experimental.jsDate }}
