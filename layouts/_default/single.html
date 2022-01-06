@@ -143,6 +143,32 @@
       })
     </script>
     {{ end }}
+
+    {{ if .Site.Params.Waline.enable }}
+    <article class="ui segment" data-html2canvas-ignore>
+      <script src='{{ .Site.Params.Waline.js }}'></script>
+      <div id="waline"></div>
+    </article>
+
+    <script>
+      new Waline({
+        el: '#waline',
+        meta: {{ .Site.Params.Waline.meta }},
+    	  requiredMeta: {{ .Site.Params.Waline.requiredMeta }},
+    	  login: {{ .Site.Params.Waline.login }},
+		    placeholder: {{ .Site.Params.Waline.placeholder }},
+    	  serverURL: {{ .Site.Params.Waline.serverURL }},
+    	  avatarCDN: {{ .Site.Params.Waline.avatarCDN }},
+    	  pageSize: {{ .Site.Params.Waline.pageSize }},
+    	  avatar: {{ .Site.Params.Waline.avatar }},
+    	  lang: {{ .Site.Params.Waline.lang }},
+  		  visitor: {{ .Site.Params.Waline.visitor }},
+  		  highlight: {{ .Site.Params.Waline.highlight }},
+  		  uploadImage: {{ .Site.Params.Waline.uploadImage }},
+        emoji: {{  .Site.Params.Waline.emoji }}
+      })
+    </script>
+    {{ end }}
   </div>
 </div>
 {{ end }}
