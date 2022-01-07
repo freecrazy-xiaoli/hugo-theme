@@ -54,8 +54,8 @@
                 {{ .Site.Params.author }}
               {{ end }}
 
-              | {{ if .Site.Params.Experimental.jsDate }}
-                  <span data-format="luxon">{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}</span>
+               {{ if .Site.Params.Experimental.jsDate }}
+                  于<span data-format="luxon">{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}</span>发表
                 {{ else }}
                   {{ if eq .Site.Language.Lang "zh" }}
                     {{ index .Site.Data.zh.Weekday (printf "%d" .Date.Weekday) }}，{{ index .Site.Data.zh.Month (printf "%d" .Date.Month) }} {{ .Date.Day }} 日，{{ .Date.Year }} 年
@@ -70,9 +70,7 @@
                   {{ end }}
                 {{ end }}
 
-              | {{ .ReadingTime }}{{ i18n "minuteRead" .ReadingTime }}
-
-              | {{ .WordCount }} 字
+              | 共 {{ .WordCount }} 字，需 {{ .ReadingTime }}{{ i18n "minuteRead" .ReadingTime }}
 
               {{ if ne .Params.nolastmod true }}
               | {{ i18n "updateAt" }}
@@ -107,6 +105,11 @@
         {{ end }}
 
         {{ .Content | emojify }}
+
+        {{ if .Site.Params.Reward.enable }}
+        {{ partial "reward.html" . }}
+        {{ end }}
+
       </article>
     </section>
 
