@@ -10,6 +10,10 @@
 {{ end }}
 {{ end }}
 
+{{ if .Site.Params.Waline.enable }}
+<link rel="stylesheet" href="{{ .Site.Params.Waline.css }}" />
+{{ end }}
+
 {{ if .Site.Params.valine }}
 <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
 {{ end }}
@@ -43,7 +47,7 @@
           {{- .Title -}}
           <span class="sub header">
             <span class="left">
-              <i class="user icon"></i>
+              <i class="user outline icon" title="用户名"></i>
               {{ if isset .Params "author" }}
                 {{ if isset .Params "authorlink" }}
                   <a href="{{ .Params.authorlink }}" target="_blank">{{ .Params.author }}</a>
@@ -55,7 +59,7 @@
               {{ end }}
 
                {{ if .Site.Params.Experimental.jsDate }}
-                  <i class="calendar alternate icon"></i><span data-format="luxon">{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}</span>
+                  <i class="calendar minus outline icon" title="时间"></i><span data-format="luxon">{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}</span>
                 {{ else }}
                   {{ if eq .Site.Language.Lang "zh" }}
                     {{ index .Site.Data.zh.Weekday (printf "%d" .Date.Weekday) }}，{{ index .Site.Data.zh.Month (printf "%d" .Date.Month) }} {{ .Date.Day }} 日，{{ .Date.Year }} 年
@@ -70,11 +74,13 @@
                   {{ end }}
                 {{ end }}
 
-                <i class="file alternate icon"></i> {{ .WordCount }} 字
+                <i class="file alternate outline icon" title="字数"></i>{{ .WordCount }} 
 
-                <!-- <i class="clock icon"></i> {{ .ReadingTime }}{{ i18n "minuteRead" .ReadingTime }}
+                <i class="comment outline icon" title="评论数"></i><span class="waline-comment-count"></span>
 
-                <i class="eye icon"></i><span id="busuanzi_value_page_pv"></span> -->
+                <i class="hotjar icon" title="阅读量"></i><span class="waline-pageview-count"></span>
+
+                <!-- <i class="hourglass outline icon"></i> 需{{ .ReadingTime }}{{ i18n "minuteRead" .ReadingTime }} -->
 
               {{ if ne .Params.nolastmod true }}
               | {{ i18n "updateAt" }}
@@ -158,21 +164,26 @@
     </article>
 
     <script>
-      new Waline({
+      Waline.init({
         el: '#waline',
+        serverURL: {{ .Site.Params.Waline.serverURL }},
+        login: {{ .Site.Params.Waline.login }},
         meta: {{ .Site.Params.Waline.meta }},
-    	  requiredMeta: {{ .Site.Params.Waline.requiredMeta }},
-    	  login: {{ .Site.Params.Waline.login }},
-		    placeholder: {{ .Site.Params.Waline.placeholder }},
-    	  serverURL: {{ .Site.Params.Waline.serverURL }},
-    	  avatarCDN: {{ .Site.Params.Waline.avatarCDN }},
-    	  pageSize: {{ .Site.Params.Waline.pageSize }},
-    	  avatar: {{ .Site.Params.Waline.avatar }},
-    	  lang: {{ .Site.Params.Waline.lang }},
-  		  visitor: {{ .Site.Params.Waline.visitor }},
-  		  highlight: {{ .Site.Params.Waline.highlight }},
-  		  uploadImage: {{ .Site.Params.Waline.uploadImage }},
-        emoji: {{  .Site.Params.Waline.emoji }}
+        requiredMeta: {{ .Site.Params.Waline.requiredMeta }},
+        placeholder: {{ .Site.Params.Waline.placeholder }},
+        dark: {{ .Site.Params.Waline.dark }},
+        wordLimit: {{ .Site.Params.Waline.wordLimit }},
+        commentSorting: {{ .Site.Params.Waline.commentSorting }},
+        placeholder: {{ .Site.Params.Waline.placeholder }},
+        imageUploader: {{ .Site.Params.Waline.imageUploader }},
+        reaction: {{ .Site.Params.Waline.reaction }},
+        pageSize: {{ .Site.Params.Waline.pageSize }},
+        lang: {{ .Site.Params.Waline.lang }},
+        highlight: {{ .Site.Params.Waline.highlight }},
+        comment: {{ .Site.Params.Waline.comment }},
+        pageview: {{ .Site.Params.Waline.pageview }},
+        emoji: {{ .Site.Params.Waline.emoji }},
+        search: {{ .Site.Params.Waline.search }}
       })
     </script>
     {{ end }}

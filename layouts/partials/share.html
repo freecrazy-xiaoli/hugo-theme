@@ -2,6 +2,12 @@
   <a href="#" class="save-as-image" title="{{ i18n "saveAsImage" }}" onclick="savePostAsImg()">
     <i class="save icon"></i>
   </a>
+  <a href="http://connect.qq.com/widget/shareqq/index.html?url={{ .Permalink }}&sharesource=qzone&title=={{ .Title }}" title="QQ">
+    <i class="qq icon"></i>
+  </a>
+  <a href="https://web.whatsapp.com/send?text={{ .Title }}&url={{ .Permalink }}" title="Whatsapp">
+    <i class="whatsapp square icon"></i>
+  </a>
   <a href="https://twitter.com/intent/tweet?text={{ .Title }}&url={{ .Permalink }}" title="Twitter">
     <i class="twitter icon"></i>
   </a>
