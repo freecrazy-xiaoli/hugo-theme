@@ -10,8 +10,8 @@ categories:
   - category1
 tags:
   - tag1
-slug: {{ title }}
-nolastmod: true
+slug: {{ replace .TranslationBaseName "-" " " | title }}
+nolastmod: false
 draft: false
 ---
 
