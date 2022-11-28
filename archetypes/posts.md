@@ -10,6 +10,7 @@ categories:
   - category1
 tags:
   - tag1
+slug: {{ title }}
 nolastmod: true
 draft: false
 ---

@@ -1,11 +1,11 @@
 [home]
-other = "首页"
+other = "主页"
 
 [backToHome]
 other = "返回首页"
 
 [flip]
-other = "翻转！"
+other = "关于"
 
 [archives]
 other = "归档"
