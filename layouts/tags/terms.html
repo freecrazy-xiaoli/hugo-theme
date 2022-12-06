@@ -1,42 +1,108 @@
-{{ define "title" }}
-{{- T "allTags" -}}
+{{ define "title" }}{{ .Title }}{{ end }}
+
+{{ define "css" }}
+
+{{ if .Site.Params.highlightjs }}
+{{ if .Site.Params.highlightjsTheme }}
+<link rel="stylesheet" data-highlight href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/{{ .Site.Params.highlightjsTheme }}.min.css" />
+{{ else }}
+<link rel="stylesheet" data-highlight href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/default.min.css" />
+{{ end }}
+{{ end }}
 {{ end }}
 
-{{ define "main"}}
+{{ define "main" }}
+{{ with .Site.GetPage "/learn.md" }}
+<div class="ui relaxed centered grid dream-grid dream-grid-single"{{ if .Site.Params.reversePostAndAside }}style="flex-direction: row-reverse;"{{ end }}>
+  {{ $showTOC := ge (len .TableOfContents) 33 }}
+  {{ $shareInAside := .Site.Params.shareInAside }}
+  {{ $showAside := or $showTOC $shareInAside }}
+  {{ if $showAside }}
+  <aside class="sixteen wide mobile sixteen wide tablet three wide computer column dream-single-aside">
+    <div class="ui segment toc">
+      {{ .TableOfContents }}
+    </div>
+  </aside>
+  {{ end }}
+  <div class="typo sixteen wide mobile sixteen wide tablet ten wide computer column markdown-body dream-single" id="dream-save-post-as-img">
+    
+    <section class="ui top attached segment">
+      <header>
+        <h1 class="ui large header">
+          {{- .Title -}}
+          <span class="sub header">
+            <span class="left">
+              <i class="user outline icon" title="用户名"></i>
+              {{ if isset .Params "author" }}
+                {{ if isset .Params "authorlink" }}
+                  <a href="{{ .Params.authorlink }}" target="_blank">{{ .Params.author }}</a>
+                {{ else }}
+                  {{ .Params.author }}
+                {{ end }}
+              {{ else }}
+                {{ .Site.Params.author }}
+              {{ end }}
 
-{{ partial "header.html" . }}
+                <i class="file alternate outline icon" title="字数"></i>{{ .WordCount }} 
 
-{{ $collapsibleTags := .Site.Params.collapsibleTags}}
-{{ $collapseBySummary := .Site.Params.collapseBySummary }}
-<div class="ui container">
-  <article class="ui segment dream-tags-section">
-    <h2 class="ui header">
-      {{- T "allTags" -}}
-      <span class="ui grey sub header">
-        {{- if eq (len .Data.Terms) 1 -}}
-        {{ T "tag" 1 }}
-        {{- else -}}
-        {{ T "tag" (len .Data.Terms) }}
-        {{- end -}}
-      </span>
-    </h2>
-
-    {{ range .Data.Terms.Alphabetical }}
-      {{ if $collapsibleTags }}
-        {{ partial "collapsibleTags.html" (dict "ctx" . "collapseBySummary" $collapseBySummary) }}
-      {{ else }}
-        <h3 class="ui header">
-          <a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a>&nbsp;{{- T "article" .Count -}}
-        </h3>
-        <ul>
-          {{ range .Pages }}
-          <li>
-            <a href="{{ .RelPermalink }}">{{ .Title }}</a>
-          </li>
-          {{ end }}
-        </ul>
-      {{ end }}
-    {{ end }}
-  </article>
+              {{ if ne .Params.nolastmod true }}
+                <i class="edit icon" title="更新时间"></i> {{ i18n "updateAt" }}
+                {{ if .Site.Params.Experimental.jsDate }}
+                  <span data-format="luxon">{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}</span>
+                {{ else }}
+                  {{ if eq .Site.Language.Lang "zh" }}
+                    {{ index .Site.Data.zh.Weekday (printf "%d" .Lastmod.Weekday) }}，{{ index .Site.Data.zh.Month (printf "%d" .Lastmod.Month) }} {{ .Lastmod.Day }} 日，{{ .Lastmod.Year }} 年
+                  {{ else if eq .Site.Language.Lang "es" }}
+                    {{ index .Site.Data.es.Weekday (printf "%d" .Lastmod.Weekday) }}, {{ .Lastmod.Day }} de {{ index .Site.Data.es.Month (printf "%d" .Lastmod.Month) }} de {{ .Lastmod.Year }}
+                  {{ else if eq .Site.Language.Lang "pt" }}
+                    {{ index .Site.Data.pt.Weekday (printf "%d" .Lastmod.Weekday) }}, {{ .Lastmod.Day }} de {{ index .Site.Data.pt.Month (printf "%d" .Lastmod.Month) }} de {{ .Lastmod.Year }}
+                  {{ else if eq .Site.Language.Lang "fr" }}
+                    {{ index .Site.Data.fr.Weekday (printf "%d" .Date.Weekday) }} {{ .Date.Day }} {{ index .Site.Data.fr.Month (printf "%d" .Date.Month) }} {{ .Date.Year }}
+                  {{ else }}
+                    {{ .Lastmod.Format "Monday, Jan 2, 2006" }}
+                  {{ end }}
+                {{ end }}
+              {{ end }}
+            </span>
+          </span>
+        </h1>
+      </header>
+      
+      <article class="main">
+        {{ if and .Params.Cover .Site.Params.showSummaryCoverInPost }}
+        <img class="cover" src="{{ .Params.Cover }}" />
+        {{ end }}
+        {{ .Content | emojify }}
+      </article>
+    </section>
+ 
+  </div>
 </div>
+{{ end }}
+{{ end }}
+
+{{ define "js" }}
+
+{{ if .Site.Params.Experimental.jsDate }}
+<script src="https://cdn.jsdelivr.net/npm/luxon@1.26.0"></script>
+
+{{ partial "luxon.html" . }}
+{{ end }}
+
+<script src="{{ "/js/scrollToTop.js" | relURL }}"></script>
+
+{{ if .Site.Params.highlightjs }}
+<script src="{{ if .Site.Params.highlightjsCDN }}{{ .Site.Params.highlightjsCDN }}{{ else }}{{ "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js" }}{{ end}}"></script>
+
+{{ if .Site.Params.highlightjsExtraLanguages }}
+{{ range .Site.Params.highlightjsExtraLanguages }}
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/languages/{{ . }}.min.js"></script>
+{{ end }}
+{{ end }}
+
+{{ partial "highlight.html" . }}
+{{ end }}
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.1"></script>
+<script src="{{ "/js/post.js" | relURL }}" defer></script>
 {{ end }}
