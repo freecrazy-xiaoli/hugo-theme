@@ -3,7 +3,7 @@ title: {{ replace .TranslationBaseName "-" " " | title }}
 date: {{ .Date }}
 lastmod: {{ .Date }}
 author: 癫狂傲骨
-avatar: https://img.freecrazy.cn/202112141544211.jpeg
+avatar: https://img.freecrazy.life/202112141544211.jpeg
 # authorlink: https://author.site
 cover: https://cdn.jsdelivr.net/gh/freecrazy-xiaoli/blog-imgs/blog/202112112116560.png
 categories:
